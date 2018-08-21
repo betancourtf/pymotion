@@ -1,0 +1,5 @@
+django==2.1
+djangorestframework==3.8.2
+geopy==1.16.0
+pillow==5.2.0
+requests==2.19.1

@@ -1,4 +1,5 @@
 import requests
+from os import environ
 
 from django.db import models
 from django.conf import settings
@@ -46,7 +47,7 @@ class MoodCapture(models.Model):
     def recognize(self):
         image_path = self.image.path
         image_data = open(image_path, "rb").read()
-        headers  = {'Ocp-Apim-Subscription-Key': settings.EMOTIONS_API_KEY, "Content-Type": "application/octet-stream" }
+        headers  = {'Ocp-Apim-Subscription-Key': environ.get('EMOTIONS_API_KEY',''), "Content-Type": "application/octet-stream" }
         # All this attributes work
         # 'returnFaceAttributes': 'age,gender,headPose,smile,facialHair,glasses,emotion,hair,makeup,occlusion,accessories,blur,exposure,noise'
         params = {'returnFaceId': 'true', 'returnFaceLandmarks': 'false', 'returnFaceAttributes':'emotion'}

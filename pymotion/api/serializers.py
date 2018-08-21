@@ -4,6 +4,7 @@ from uuid import uuid4
 from django.core.files.base import ContentFile
 from django.contrib.auth.models import User
 from rest_framework import serializers
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 from .models import MoodCapture
 
@@ -27,10 +28,26 @@ class MoodCapturePostSerializer(serializers.ModelSerializer):
     image = Base64ImageField(max_length=100, allow_empty_file=False)
     class Meta:
         model = MoodCapture
-        fields = ('user', 'latitude', 'longitude', 'image')
+        fields = ('user','latitude', 'longitude', 'image')
         
         
 class MoodCaptureListSerializer(serializers.ModelSerializer):
     class Meta:
         model = MoodCapture
         fields = ('latitude', 'longitude', 'mood', 'created_at')
+
+
+class CloseByHappyPlaceListSerializer(serializers.ModelSerializer):
+    distance = serializers.FloatField()
+    class Meta:
+        model = MoodCapture
+        fields = ('latitude', 'longitude', 'distance', 'created_at')
+        
+
+class ClosestHappyPlaceSerializer(serializers.Serializer):
+    # Current location of user
+    latitude = serializers.FloatField(validators=[MinValueValidator(-90), MaxValueValidator(90)])
+    longitude = serializers.FloatField(validators=[MinValueValidator(-180), MaxValueValidator(180)])
+    # Offsets to use for search
+    lat_offset = serializers.FloatField(validators=[MinValueValidator(0.000001), MaxValueValidator(0.4)],default=0.02)
+    lon_offset = serializers.FloatField(validators=[MinValueValidator(0.000001), MaxValueValidator(0.4)],default=0.02)

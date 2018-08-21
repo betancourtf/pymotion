@@ -23,6 +23,7 @@ router = routers.DefaultRouter()
 
 router.register(r'mood', views.UserMood, base_name='mood')
 router.register(r'histogram', views.UserMoodHistrogram, base_name='histogram')
+router.register(r'happyplaces', views.CloseByHappyPlace, base_name='happyplaces')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
